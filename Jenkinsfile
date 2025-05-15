@@ -1,21 +1,43 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_HUB_USERNAME = 'hafsa'
+        IMAGE_NAME = 'devops'
+        DOCKER_CREDENTIALS_ID = 'DevOps' 
+        DOCKER_REGISTRY = 'https://index.docker.io/v1/'
+    }
+
     stages {
-        stage('Build Docker Image') {
+        stage('Clone Repo') {
             steps {
-                script {
-                    sh 'docker build -t startup-web .'
-                }
+                git branch: 'main', url: 'https://github.com/Hafsa-Maqsood/startup-web.git'
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Build Docker Image') {
+            steps {
+              script {
+    def dockerImage = docker.build("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:latest")
+}
+            }
+        }
+
+        stage('Push to Docker Hub') {
             steps {
                 script {
-                    sh 'docker run -d -p 3000:3000 --name startup-web-container startup-web || echo "Container already running."'
+                    docker.withRegistry(DOCKER_REGISTRY, DOCKER_CREDENTIALS_ID) {
+                        dockerImage.push('latest')
+                    }
                 }
             }
         }
     }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
 }
+
