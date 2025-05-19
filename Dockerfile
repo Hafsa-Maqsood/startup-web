@@ -1,13 +1,20 @@
-# Step 1: Build Stage
-FROM node:18 AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+# Use official Node.js image
+FROM node:18
 
-# Step 2: Production Stage using NGINX
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the project
+COPY . .
+
+# Expose port (change according to your app)
+EXPOSE 3000
+
+# Run the app
+CMD ["npm", "start"]

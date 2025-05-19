@@ -1,0 +1,9 @@
+docker build -t startup-app .
+docker run -p 3000:3000 startup-app
+
+  Local:            http://localhost:3000
+  On Your Network:  http://172.17.0.2:3000
+
+
+  docker login -u 40880
+  dckr_pat_uojtRAQZXnBPaAfTOnrb0DdR9Mc
