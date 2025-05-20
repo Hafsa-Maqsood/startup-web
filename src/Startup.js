@@ -24,7 +24,7 @@ const Startup = () => {
         </button>
 
         <button className="buttonStarted" onClick={() => navigate('Home')}>
-          Get Started <FaArrowCircleRight size={20} />
+          Started <FaArrowCircleRight size={20} />
         </button>
       </div>
     </div>
